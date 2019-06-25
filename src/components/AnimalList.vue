@@ -13,18 +13,32 @@
       <label for="dateOfBirth">dateOfBirth</label>
       <input type="text" id="dateOfBirth" v-model="newAnimal.dateOfBirth" required>
     </div>
-
+    <select v-model="newAnimal.sector">
+      <option disabled value="">Please select animal</option>
+      <option v-for="(sector,index) in sectors" :key="index">
+        {{sector}}
+      </option>
+      
+    </select>
     <div>
       <button type="submit">Add Animal</button>
     </div>
   </form>
     <ul>
       <li v-for='(animal,index) in animals' :key="index">
-        {{ animal.type }} {{ animal.name }} - {{ animal.dateOfBirth ? animal.dateOfBirth : "Nepoznat" }}
+        {{ animal.type }} {{ animal.name }} - {{ animal.dateOfBirth ? animal.dateOfBirth : "Nepoznat" }} - {{animal.sector}}
         <button @click="removeAnimal(index)">Remove Animal</button>
         <button @click="moveToTop(index)">Move to top</button>
       </li>
     </ul>
+    <div>
+    <ul>
+        <li v-for="(sector,index) in sectors" :key="index">
+            {{ sector }}
+        <button @click="showAnimalsSector(sector)">Vidi listu zivotinja </button>
+        </li>
+    </ul>
+    </div>
 </div>
 </template>
 
@@ -35,15 +49,20 @@ export default {
       newAnimal: {
         type:'',
         name:'',
-        dateOfBirth:''
+        dateOfBirth:'',
+        sector:''
       },
 
+      sectors: [
+        "zglavkari","glavonosci","sisari","ribe","ptice"
+      ],
+
       animals: [
-        { type: 'Lion', name: 'Joe', dateOfBirth: '08/08/2018' },
-        { type: 'Seal', name: 'Jack', dateOfBirth: '07/07/2013' },
-        { type: 'Pidgeon', name: 'Mc', dateOfBirth: '05/05/1988' },
-        { type: 'Frog', name: 'Kreu', dateOfBirth: '' },
-        { type: 'Crow', name: 'Lorry', dateOfBirth: '02/02/1988' }
+        { type: 'Lion', name: 'Joe', dateOfBirth: '08/08/2018', sector:"sisari" },
+        { type: 'Seal', name: 'Jack', dateOfBirth: '07/07/2013', sector:"ptice" },
+        { type: 'Pidgeon', name: 'Mc', dateOfBirth: '05/05/1988', sector:"ribe" },
+        { type: 'Frog', name: 'Kreu', dateOfBirth: '', sector:"sisari" },
+        { type: 'Crow', name: 'Lorry', dateOfBirth: '02/02/1988', sector:"zglavkari" }
       ]
     }
   },
@@ -66,7 +85,15 @@ export default {
         name = "",
         dateOfBirth = ""
       ]
-    }
+    },
+
+     showAnimalsSector (sector) {
+      let sectorAnimals = this.animals.filter(animal => animal.sector === sector).map(animal=>animal.name);
+
+      
+      window.alert(sectorAnimals.join(', '))
+    },
+
   }
 }
 </script>
